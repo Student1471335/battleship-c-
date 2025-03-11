@@ -10,11 +10,11 @@ const char HIT = 'X';
 const char MISS = 'O';
 
 typedef std::vector<std::vector<char>> Grid;
-
+// making the grid
 void initializeGrid(Grid& grid) {
     grid = Grid(GRID_SIZE, std::vector<char>(GRID_SIZE, WATER));
 }
-
+// random ship place
 void placeShips(Grid& grid, int shipCount) {
     std::srand(std::time(0));
     int placed = 0;
@@ -27,7 +27,7 @@ void placeShips(Grid& grid, int shipCount) {
         }
     }
 }
-
+//show gird to see your shot and your own ship loc
 void displayGrid(const Grid& grid, bool revealShips = false) {
     std::cout << "  0 1 2 3 4" << std::endl;
     for (int i = 0; i < GRID_SIZE; i++) {
@@ -43,7 +43,7 @@ void displayGrid(const Grid& grid, bool revealShips = false) {
         std::cout << std::endl;
     }
 }
-
+//shot taking
 bool takeShot(Grid& grid, int x, int y) {
     if (grid[x][y] == SHIP) {
         grid[x][y] = HIT;
@@ -78,31 +78,31 @@ int main() {
     placeShips(playerGrid, 3);
 
     std::cout << "Welcome to Battleship!" << std::endl;
-
+    //needs changes not clear for people to add row and column
     while (true) {
         int x, y;
-        std::cout << "Your turn! Enter coordinates (row and column): ";
+        std::cout << "Your turn! Enter coordinates (row and column) one at a time: ";
         std::cin >> x >> y;
-
+        // if player uses the same coordinates
         if (x < 0 || x >= GRID_SIZE || y < 0 || y >= GRID_SIZE) {
-            std::cout << "Invalid coordinates! Try again." << std::endl;
+            std::cout << "Invalid coordinates! Try again." << std::endl;  
             continue;
         }
 
         takeShot(computerGrid, x, y);
-        displayGrid(computerGrid);
-
+        displayGrid(computerGrid); //seeing where you have hit
+        //win stake
         if (allShipsSunk(computerGrid)) {
             std::cout << "Congratulations! You sank all enemy ships!" << std::endl;
             break;
         }
-
+        //com taking random shots it can shot the same loc at the moment
         x = std::rand() % GRID_SIZE;
         y = std::rand() % GRID_SIZE;
         std::cout << "Computer's turn: " << x << " " << y << std::endl;
         takeShot(playerGrid, x, y);
         displayGrid(playerGrid, true);
-
+        // lose state
         if (allShipsSunk(playerGrid)) {
             std::cout << "Game over! The computer sank all your ships." << std::endl;
             break;
